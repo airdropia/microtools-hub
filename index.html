@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MicroTools Hub — Free Online Tools, No Signup, Works Offline</title>
-<meta name="description" content="12 free everyday tools that run 100% in your browser: word counter, password generator, JSON formatter, color contrast checker, unit converter, QR text encoder, slug generator, age calculator and more. No signup, no upload, no tracking.">
+<meta name="description" content="12 free everyday tools that run 100% in your browser: word counter, password generator, JSON formatter, color contrast checker, unit converter, SHA hash checker, slug generator, age calculator and more. No signup, no upload, no tracking.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://bountx-labs.github.io/microtools-hub/">
 <meta property="og:type" content="website">
@@ -213,13 +213,13 @@ input[type=color]{width:70px;height:44px;background:none;border:1px solid var(--
 <div class="out" id="bOut"></div>
 </section>
 
-<section id="qr" role="tabpanel">
-<h2>Text → QR Code</h2>
-<p class="d">Generate a QR code for a link or text, drawn on your device. Download as PNG.</p>
-<label for="qIn">Link or text</label>
-<input type="text" id="qIn" placeholder="https://example.com">
-<div class="row"><button class="act" id="qGo">Make QR</button><button class="gh" id="qDl">Download PNG</button></div>
-<div class="out" style="text-align:center"><canvas id="qCv" width="240" height="240" style="max-width:100%"></canvas><div id="qMsg" class="d"></div></div>
+<section id="hash" role="tabpanel">
+<h2>SHA Hash &amp; Checksum</h2>
+<p class="d">Compute SHA-1 / SHA-256 / SHA-384 / SHA-512 fingerprints of any text. Uses the browser's built-in crypto - useful for verifying file integrity and checksums.</p>
+<label for="hIn">Text to hash</label>
+<textarea id="hIn" placeholder="Type text to hash…"></textarea>
+<div class="row"><button class="act" id="hGo">Hash it</button><button class="gh" data-copy="hOut">Copy</button></div>
+<div class="out" id="hOut"></div>
 </section>
 
 <section id="about" role="tabpanel">
@@ -240,7 +240,7 @@ input[type=color]{width:70px;height:44px;background:none;border:1px solid var(--
 <script>
 (function(){
 "use strict";
-var tools=[["word","Word Counter"],["pass","Passwords"],["json","JSON Format"],["contrast","Contrast"],["case","Case Convert"],["slug","URL Slug"],["unit","Units"],["age","Age Calc"],["percent","Percent"],["lorem","Lorem Text"],["b64","Base64"],["qr","QR Code"],["about","About"]];
+var tools=[["word","Word Counter"],["pass","Passwords"],["json","JSON Format"],["contrast","Contrast"],["case","Case Convert"],["slug","URL Slug"],["unit","Units"],["age","Age Calc"],["percent","Percent"],["lorem","Lorem Text"],["b64","Base64"],["hash","Hashing"],["about","About"]];
 var nav=document.getElementById("nav");
 tools.forEach(function(t,i){var b=document.createElement("button");b.type="button";b.textContent=t[1];b.setAttribute("role","tab");b.dataset.t=t[0];b.setAttribute("aria-selected",i===0?"true":"false");nav.appendChild(b);});
 function show(id){
@@ -427,99 +427,26 @@ document.addEventListener("click",function(e){
   }catch(err){out("bOut","Could not decode — input is not valid Base64.");}
 });
 
-/* ---- QR (compact byte-mode encoder, MIT algorithm) ---- */
-var QR=(function(){
- var ALIGN=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,40,64,84],[6,26,46,66,86],[6,26,48,68,88],[6,26,50,72,90],[6,30,54,78,94],[6,30,56,80,98],[6,30,58,82,102],[6,34,62,86,110],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,30,56,80,104,128],[6,30,58,82,106,132],[6,34,62,86,110,134],[6,34,46,68,90,112],[6,30,48,70,92,114],[6,38,54,70,86,102],[6,32,50,68,86,104],[6,32,52,70,88,106],[6,32,54,72,90,108],[6,34,56,74,92,110]];
- var CAP=[[46,2],[60,4],[87,6],[124,8],[175,10],[232,14],[287,16],[431,26],[557,36],[719,44]];
- var EXP=new Array(512),LOG=new Array(256);
- (function(){var x=1;for(var i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&0x100)x^=0x11d;}for(var j=255;j<512;j++)EXP[j]=EXP[j-255];})();
- function mul(a,b){return (a===0||b===0)?0:EXP[LOG[a]+LOG[b]];}
- function gen(n){var g=[1];for(var i=0;i<n;i++){var ng=new Array(g.length+1).fill(0);for(var j=0;j<g.length;j++){ng[j]^=g[j];ng[j+1]^=mul(g[j],EXP[i]);}g=ng;}return g;}
- function encVer(ver,data){
-  var size=ver*4+17,m=[];for(var i=0;i<size;i++){m.push(new Array(size).fill(null));}
-  function set(r,c,v){if(r>=0&&r<size&&c>=0&&c<size){m[r][c]=v;}}
-  function finder(r,c){for(var dr=-1;dr<=7;dr++)for(var dc=-1;dc<=7;dc++){var on=(dr>=0&&dr<=6&&(dc===0||dc===6))||(dc>=0&&dc<=6&&(dr===0||dr===6))||(dr>=2&&dr<=4&&dc>=2&&dc<=4);set(r+dr,c+dc,on?1:0);}}
-  finder(0,0);finder(size-7,0);finder(0,size-7);
-  for(var a=8;a<size-8;a++){var v=a%2===0?1:0;if(m[6][a]==null)m[6][a]=v;if(m[a][6]==null)m[a][6]=v;}
-  var align=ALIGN[ver-1];
-  align.forEach(function(r){align.forEach(function(c){if(m[r][c]==null){for(var dr=-2;dr<=2;dr++)for(var dc=-2;dc<=2;dc++){var on=Math.max(Math.abs(dr),Math.abs(dc))!==1;set(r+dr,c+dc,on?1:0);}}});});
-  set(size-8,8,1);for(var b=0;b<8;b++){set(8,size-1-b,b===7?1:0);set(size-1-b,8,b===7?1:0);}
-  return m;
- }
- function make(text,ver){
-  var size=ver*4+17,m=encVer(ver,text);
-  var total=CAP[ver-1][1],dbits=(function(){var c=[0,10,12,14];return (ver<=9?c[2]:ver<=26?c[2]+2:c[2]+4);})(),data=0;
-  for(var i=0;i<size;i++)for(var j=0;j<size;j++)if(m[i][j]==null)data++;
-  var ecPer=(total-CAP[ver-1][0])===0?0:0;
-  var dCount=CAP[ver-1][0];
-  var dEcc=CAP[ver-1][1];
-  var dcw=dCount,ecw=dEcc;
-  var cap=CAP[ver-1][0];
-  var bytes=new Array(cap).fill(0);
-  var bs=[],n=text.length;
-  bs.push(4);
-  if(n<1<<8)bs.push(n);else bs.push(1,n>>8,n&255);
-  for(var k=0;k<n;k++){var cc=text.charCodeAt(k);if(cc<128)bs.push(cc);else{for(var u=0;u<2;u++){}} }
-  var bits=[];
-  function push(v,l){for(var i2=l-1;i2>=0;i2--)bits.push((v>>i2)&1);}
-  push(4,4);
-  if(n<1<<8)push(n,8);else push(n,16);
-  for(var q=0;q<n;q++)push(text.charCodeAt(q)&255,8);
-  var maxBits=cap*8;
-  if(bits.length>maxBits)return null;
-  push(0,Math.min(4,maxBits-bits.length));
-  while(bits.length%8)bits.push(0);
-  var dat=[];for(var z=0;z<bits.length;z+=8){var v2=0;for(var y=0;y<8;y++)v2=v2*2+bits[z+y];dat.push(v2);}
-  var padA=[0xEC,0x11],pi=0;while(dat.length<cap){dat.push(padA[pi++%2]);}
-  var blocks=[],eccs=[],g1=gen(ecw);
-  for(var bi=0;bi<dcw;bi++){var chunk=dat.slice(bi*Math.floor(cap/dcw),(bi+1)*Math.floor(cap/dcw));blocks.push(chunk);
-   var r=g1.slice();
-   chunk.forEach(function(d){var factor=r[0]^d;r.shift();r.push(0);for(var gi=0;gi<r.length;gi++)r[gi]^=mul(g1[gi+1],factor);});
-   eccs.push(r);}
-  var inter=[];for(var x=0;x<Math.floor(cap/dcw);x++)for(var bx=0;bx<dcw;bx++){if(blocks[bx][x]!==undefined)inter.push(blocks[bx][x]);}
-  for(var ex=0;ex<ecw;ex++)for(var bx2=0;bx2<dcw;bx2++)inter.push(eccs[bx2][ex]);
-  var stream=[];inter.forEach(function(b3){for(var i4=7;i4>=0;i4--)stream.push((b3>>i4)&1);});
-  var row=size-1,col=size-1,upward=true,idx=0;
-  var reserved=m;
-  for(var c2=size-1;c2>0;c2-=2){
-   if(c2===6)c2--;
-   for(var n2=0;n2<size;n2++){
-    for(var j2=0;j2<2;j2++){
-     var cc2=c2-j2,rr=upward?size-1-n2:n2;
-     if(reserved[rr][cc2]===null){
-      var mask=((rr+cc2)%2===0);
-      var bit=idx<stream.length?stream[idx]:0;idx++;
-      var mbit=bit^(mask?1:0);
-      reserved[rr][cc2]=mbit;
-     }
-    }
-   }
-   upward=!upward;
-  }
-  return reserved;
- }
- function best(text){
-  for(var v=1;v<=10;v++){var capBits=(v<=9?10:v<=26?12:16);var avail=(CAP[v-1][0]*8)-(4+capBits);if(text.length*8<=avail)return make(text,v);}
-  return null;
- }
- return {draw:function(canvas,text){
-   var m=best(text);
-   if(!m)return false;
-   var size=m.length,q=canvas.width/(size+8),ctx=canvas.getContext("2d");
-   ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);
-   ctx.fillStyle="#000";
-   for(var r=0;r<size;r++)for(var c=0;c<size;c++)if(m[r][c])ctx.fillRect((c+4)*q,(r+4)*q,q,q);
-   return true;
- }};
-})();
-document.getElementById("qGo").addEventListener("click",function(){
-  var t=qIn.value.trim()||location.href;
-  var ok=QR.draw(document.getElementById("qCv"),t);
-  qMsg.innerHTML=ok?"QR generated on this device for: <b>"+t.slice(0,60).replace(/</g,"&lt;")+"</b>":"Text too long for this tool (max ~170 chars).";
-  qMsg.className=ok?"d":"err";
-});
-document.getElementById("qDl").addEventListener("click",function(){
-  var a=document.createElement("a");a.href=document.getElementById("qCv").toDataURL("image/png");a.download="microtools-qr.png";a.click();
+/* ---- SHA hashing (Web Crypto, spec-guaranteed) ---- */
+var hIn=document.getElementById("hIn");
+function hex(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,"0");}).join("");}
+document.getElementById("hGo").addEventListener("click",function(){
+  if(!crypto||!crypto.subtle){out("hOut","Web Crypto is unavailable in this browser context (requires HTTPS or localhost).");return;}
+  var txt=hIn.value;
+  if(!txt){out("hOut","Type some text first.");return;}
+  var enc=new TextEncoder().encode(txt),parts=["Input: "+txt.length+" characters\n"];
+  Promise.all([
+    crypto.subtle.digest("SHA-1",enc),
+    crypto.subtle.digest("SHA-256",enc),
+    crypto.subtle.digest("SHA-384",enc),
+    crypto.subtle.digest("SHA-512",enc)
+  ]).then(function(r){
+    parts.push("SHA-1   : "+hex(r[0]));
+    parts.push("SHA-256 : "+hex(r[1]));
+    parts.push("SHA-384 : "+hex(r[2]));
+    parts.push("SHA-512 : "+hex(r[3]));
+    out("hOut",parts.join("\n"));
+  }).catch(function(e){out("hOut","Hash failed: "+e.message);});
 });
 
 })();
