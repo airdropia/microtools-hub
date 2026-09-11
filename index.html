@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MicroTools Hub — Free Online Tools, No Signup, Works Offline</title>
+<meta name="description" content="12 free everyday tools that run 100% in your browser: word counter, password generator, JSON formatter, color contrast checker, unit converter, QR text encoder, slug generator, age calculator and more. No signup, no upload, no tracking.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://bountx-labs.github.io/microtools-hub/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MicroTools Hub — Free Online Tools, No Signup, Works Offline">
+<meta property="og:description" content="Twelve fast, private browser tools. Nothing you type ever leaves your device.">
+<meta property="og:url" content="https://bountx-labs.github.io/microtools-hub/">
+<meta name="theme-color" content="#0f172a">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"MicroTools Hub","applicationCategory":"UtilityApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free client-side utilities: word counter, password generator, JSON formatter, contrast checker and more. No signup, no tracking."}
+</script>
+<style>
+:root{--bg:#0f172a;--card:#1e293b;--ink:#e2e8f0;--mut:#94a3b8;--acc:#38bdf8;--line:#334155}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 system-ui,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{padding:26px 18px 12px;max-width:1080px;margin:auto}
+h1{margin:0 0 6px;font-size:1.7rem}
+.sub{color:var(--mut);margin:0}
+nav{display:flex;flex-wrap:wrap;gap:8px;padding:14px 18px;max-width:1080px;margin:auto;position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:5}
+nav button{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:.9rem;cursor:pointer}
+nav button[aria-selected=true]{background:var(--acc);color:#04212e;border-color:var(--acc);font-weight:600}
+main{max-width:1080px;margin:auto;padding:18px}
+section{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+section.on{display:block}
+h2{margin:0 0 4px;font-size:1.2rem}
+p.d{color:var(--mut);margin:0 0 14px;font-size:.94rem}
+textarea,input[type=text],select{width:100%;background:#0b1220;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:11px;font:inherit}
+textarea{min-height:150px;resize:vertical}
+label{display:block;margin:12px 0 5px;font-size:.9rem;color:var(--mut)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+button.act{background:var(--acc);color:#04212e;border:0;border-radius:10px;padding:10px 15px;font-weight:600;cursor:pointer;font-size:.95rem}
+button.gh{background:transparent;color:var(--acc);border:1px solid var(--acc);border-radius:10px;padding:10px 15px;cursor:pointer;font-size:.95rem}
+.out{margin-top:14px;background:#0b1220;border:1px dashed var(--line);border-radius:10px;padding:12px;min-height:46px;white-space:pre-wrap;word-break:break-word;font-family:ui-monospace,Consolas,monospace;font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px}
+.stat{background:#0b1220;border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
+.stat b{display:block;font-size:1.5rem;color:var(--acc)}
+.stat span{font-size:.8rem;color:var(--mut)}
+.err{color:#fca5a5}
+.ok{color:#86efac}
+footer{max-width:1080px;margin:26px auto 0;padding:18px;color:var(--mut);font-size:.9rem;border-top:1px solid var(--line)}
+a{color:var(--acc)}
+.pill{display:inline-block;background:#0b1220;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.78rem;color:var(--mut);margin-top:8px}
+input[type=color]{width:70px;height:44px;background:none;border:1px solid var(--line);border-radius:8px;padding:2px}
+</style>
+</head>
+<body>
+<header>
+<h1>MicroTools Hub</h1>
+<p class="sub">Twelve everyday tools that run entirely in your browser. <b>No signup. No uploads. No tracking. Works offline after the first load.</b></p>
+<span class="pill">🔒 Your data never leaves this device</span>
+</header>
+
+<nav id="nav" role="tablist"></nav>
+
+<main>
+
+<section id="word" role="tabpanel">
+<h2>Word &amp; Character Counter</h2>
+<p class="d">Live counts for writing, essays, tweets and articles. Includes reading time.</p>
+<label for="wIn">Paste your text</label>
+<textarea id="wIn" placeholder="Type or paste here…"></textarea>
+<div class="grid">
+<div class="stat"><b id="wcWords">0</b><span>Words</span></div>
+<div class="stat"><b id="wcChars">0</b><span>Characters</span></div>
+<div class="stat"><b id="wcNoSpace">0</b><span>No spaces</span></div>
+<div class="stat"><b id="wcLines">0</b><span>Lines</span></div>
+<div class="stat"><b id="wcSent">0</b><span>Sentences</span></div>
+<div class="stat"><b id="wcRead">0s</b><span>Read time</span></div>
+</div>
+<div class="row"><button class="act" data-copy="wcOut">Copy report</button><button class="gh" data-clear="wIn">Clear</button></div>
+<div class="out" id="wcOut"></div>
+</section>
+
+<section id="pass" role="tabpanel">
+<h2>Strong Password Generator</h2>
+<p class="d">Cryptographically random passwords generated on your device using the Web Crypto API.</p>
+<label for="pLen">Length: <span id="pLenV">20</span></label>
+<input type="range" id="pLen" min="8" max="64" value="20" style="width:100%">
+<div class="row">
+<label style="flex:1;min-width:130px"><input type="checkbox" id="pUp" checked> ABC</label>
+<label style="flex:1;min-width:130px"><input type="checkbox" id="pLo" checked> abc</label>
+<label style="flex:1;min-width:130px"><input type="checkbox" id="pNu" checked> 123</label>
+<label style="flex:1;min-width:130px"><input type="checkbox" id="pSy" checked> #$%&amp;</label>
+</div>
+<div class="out" id="pOut">Press Generate.</div>
+<div class="row"><button class="act" id="pGen">Generate</button><button class="gh" data-copy="pOut">Copy</button></div>
+</section>
+
+<section id="json" role="tabpanel">
+<h2>JSON Formatter &amp; Validator</h2>
+<p class="d">Pretty-print, minify, or validate JSON instantly. Errors point to the exact spot.</p>
+<label for="jIn">Paste JSON</label>
+<textarea id="jIn" placeholder='{"hello":"world"}'></textarea>
+<div class="row">
+<button class="act" id="jFmt">Format</button>
+<button class="gh" id="jMin">Minify</button>
+<button class="gh" id="jSort">Sort keys</button>
+<button class="gh" data-copy="jOut">Copy result</button>
+</div>
+<div class="out" id="jOut"></div>
+</section>
+
+<section id="contrast" role="tabpanel">
+<h2>Color Contrast Checker (WCAG)</h2>
+<p class="d">Check text and background colors against WCAG AA / AAA readability rules.</p>
+<div class="row">
+<div style="flex:1;min-width:150px"><label for="cFg">Text color</label><input type="color" id="cFg" value="#0f172a"></div>
+<div style="flex:1;min-width:150px"><label for="cBg">Background</label><input type="color" id="cBg" value="#e2e8f0"></div>
+</div>
+<div class="grid">
+<div class="stat"><b id="ccRatio">–</b><span>Contrast ratio</span></div>
+<div class="stat"><b id="ccAA">–</b><span>AA normal</span></div>
+<div class="stat"><b id="ccAAL">–</b><span>AA large</span></div>
+<div class="stat"><b id="ccAAA">–</b><span>AAA</span></div>
+</div>
+<div class="out" id="ccOut"></div>
+</section>
+
+<section id="case" role="tabpanel">
+<h2>Text Case Converter</h2>
+<p class="d">Switch between UPPERCASE, lowercase, Title Case, sentence case, camelCase, snake_case, kebab-case.</p>
+<label for="cIn">Your text</label>
+<textarea id="cIn" placeholder="type anything here…"></textarea>
+<div class="row">
+<button class="act" data-case="upper">UPPER</button>
+<button class="act" data-case="lower">lower</button>
+<button class="act" data-case="title">Title</button>
+<button class="act" data-case="sentence">Sentence</button>
+<button class="act" data-case="camel">camelCase</button>
+<button class="act" data-case="snake">snake_case</button>
+<button class="act" data-case="kebab">kebab-case</button>
+<button class="gh" data-copy="caseOut">Copy</button>
+</div>
+<div class="out" id="caseOut"></div>
+</section>
+
+<section id="slug" role="tabpanel">
+<h2>URL Slug Generator</h2>
+<p class="d">Turn any title into a clean, SEO-friendly URL slug. Removes stop-words optionally.</p>
+<label for="sIn">Article or page title</label>
+<input type="text" id="sIn" placeholder="10 Best Ways to Save Money in 2026!">
+<div class="row">
+<label style="flex:1"><input type="checkbox" id="sStop"> Remove stop words</label>
+<button class="act" id="sGo">Generate</button>
+<button class="gh" data-copy="sOut">Copy</button>
+</div>
+<div class="out" id="sOut"></div>
+</section>
+
+<section id="unit" role="tabpanel">
+<h2>Unit Converter</h2>
+<p class="d">Length, weight, temperature, area, volume and data storage — instant conversion.</p>
+<div class="row">
+<div style="flex:1;min-width:140px"><label for="uCat">Category</label><select id="uCat"><option value="len">Length</option><option value="mass">Weight</option><option value="temp">Temperature</option><option value="area">Area</option><option value="vol">Volume</option><option value="data">Data storage</option></select></div>
+<div style="flex:1;min-width:110px"><label for="uVal">Value</label><input type="text" id="uVal" value="1"></div>
+<div style="flex:1;min-width:140px"><label for="uFrom">From</label><select id="uFrom"></select></div>
+<div style="flex:1;min-width:140px"><label for="uTo">To</label><select id="uTo"></select></div>
+</div>
+<div class="out" id="uOut"></div>
+</section>
+
+<section id="age" role="tabpanel">
+<h2>Age &amp; Date Calculator</h2>
+<p class="d">Exact age in years, months and days; plus days between two dates — useful for school forms and deadlines.</p>
+<div class="row">
+<div style="flex:1;min-width:150px"><label for="aDob">Date of birth</label><input type="text" id="aDob" placeholder="YYYY-MM-DD"></div>
+<div style="flex:1;min-width:150px"><label for="aRef">Reference date (blank = today)</label><input type="text" id="aRef" placeholder="YYYY-MM-DD"></div>
+</div>
+<div class="row"><button class="act" id="aGo">Calculate</button><button class="gh" data-copy="aOut">Copy</button></div>
+<div class="out" id="aOut"></div>
+</section>
+
+<section id="percent" role="tabpanel">
+<h2>Percentage Calculator</h2>
+<p class="d">Three everyday questions: what is X% of Y, X is what % of Y, and increase/decrease between two values.</p>
+<div class="row">
+<div style="flex:1;min-width:120px"><label for="pc1">X (%)</label><input type="text" id="pc1" value="15"></div>
+<div style="flex:1;min-width:120px"><label for="pc2">Y (value)</label><input type="text" id="pc2" value="2400"></div>
+</div>
+<div class="out" id="pcOut"></div>
+<div class="row"><button class="act" id="pcGo">Calculate all three</button><button class="gh" data-copy="pcOut">Copy</button></div>
+</section>
+
+<section id="lorem" role="tabpanel">
+<h2>Placeholder Text Generator</h2>
+<p class="d">Classic lorem ipsum for mockups, in words, sentences or paragraphs.</p>
+<div class="row">
+<div style="flex:1;min-width:120px"><label for="lQty">Amount</label><input type="text" id="lQty" value="3"></div>
+<div style="flex:1;min-width:130px"><label for="lUnit">Unit</label><select id="lUnit"><option value="w">Words</option><option value="s">Sentences</option><option value="p">Paragraphs</option></select></div>
+</div>
+<div class="out" id="lOut"></div>
+<div class="row"><button class="act" id="lGo">Generate</button><button class="gh" data-copy="lOut">Copy</button></div>
+</section>
+
+<section id="b64" role="tabpanel">
+<h2>Base64 &amp; URL Encoder</h2>
+<p class="d">Encode or decode Base64 text and URL components. Useful for developers and form fillers.</p>
+<label for="bIn">Input</label>
+<textarea id="bIn" placeholder="Text or Base64…"></textarea>
+<div class="row">
+<button class="act" data-b64="enc">Base64 encode</button>
+<button class="act" data-b64="dec">Base64 decode</button>
+<button class="gh" data-b64="uenc">URL encode</button>
+<button class="gh" data-b64="udec">URL decode</button>
+<button class="gh" data-copy="bOut">Copy</button>
+</div>
+<div class="out" id="bOut"></div>
+</section>
+
+<section id="qr" role="tabpanel">
+<h2>Text → QR Code</h2>
+<p class="d">Generate a QR code for a link or text, drawn on your device. Download as PNG.</p>
+<label for="qIn">Link or text</label>
+<input type="text" id="qIn" placeholder="https://example.com">
+<div class="row"><button class="act" id="qGo">Make QR</button><button class="gh" id="qDl">Download PNG</button></div>
+<div class="out" style="text-align:center"><canvas id="qCv" width="240" height="240" style="max-width:100%"></canvas><div id="qMsg" class="d"></div></div>
+</section>
+
+<section id="about" role="tabpanel">
+<h2>About &amp; Privacy</h2>
+<p class="d">MicroTools Hub exists because everyday tools shouldn't demand an account, show a 30-second ad, or ship your text to a server.</p>
+<p>Every calculator and converter on this page runs locally in JavaScript inside your browser. Nothing is sent anywhere: no analytics, no cookies, no server requests after the page loads. Turn off your internet after opening this page and everything still works.</p>
+<p><b>Support this project:</b> if a tool saved you time, a small tip keeps these pages free, ad-light and running for everyone. <a href="https://github.com/sponsors" rel="nofollow">GitHub Sponsors</a> · <a href="https://patreon.com" rel="nofollow">Patreon</a> · <a href="https://www.binance.com/en/my/ref" rel="nofollow">Crypto</a></p>
+<p class="d">Found a bug or want a tool added? <a href="https://github.com/bountx-labs/microtools-hub/issues">Open an issue</a> — requests are welcome.</p>
+</section>
+
+</main>
+
+<footer>
+<p><b>MicroTools Hub</b> — free browser utilities, built to be fast, private and ad-light. Works on phones and low-data connections.</p>
+<p>All calculations happen on your device. <a href="#about">Privacy</a> · <a href="https://github.com/bountx-labs/microtools-hub">Source</a></p>
+</footer>
+
+<script>
+(function(){
+"use strict";
+var tools=[["word","Word Counter"],["pass","Passwords"],["json","JSON Format"],["contrast","Contrast"],["case","Case Convert"],["slug","URL Slug"],["unit","Units"],["age","Age Calc"],["percent","Percent"],["lorem","Lorem Text"],["b64","Base64"],["qr","QR Code"],["about","About"]];
+var nav=document.getElementById("nav");
+tools.forEach(function(t,i){var b=document.createElement("button");b.type="button";b.textContent=t[1];b.setAttribute("role","tab");b.dataset.t=t[0];b.setAttribute("aria-selected",i===0?"true":"false");nav.appendChild(b);});
+function show(id){
+  document.querySelectorAll("nav button").forEach(function(b){b.setAttribute("aria-selected",String(b.dataset.t===id));});
+  document.querySelectorAll("main section").forEach(function(s){s.classList.toggle("on",s.id===id);});
+  try{history.replaceState(null,"","#"+id);}catch(e){}
+}
+nav.addEventListener("click",function(e){if(e.target.dataset.t)show(e.target.dataset.t);});
+var h=(location.hash||"#word").slice(1);show(tools.some(function(t){return t[0]===h;})?h:"word");
+
+function out(id,txt){document.getElementById(id).textContent=txt;}
+function copyTo(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text);}
+  else{var ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);}
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-copy]");if(!b)return;
+  var el=document.getElementById(b.dataset.copy);copyTo(el.textContent);
+  var old=b.textContent;b.textContent="Copied ✓";setTimeout(function(){b.textContent=old;},1200);
+});
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-clear]");if(b){document.getElementById(b.dataset.clear).value="";document.getElementById(b.dataset.clear).dispatchEvent(new Event("input"));}
+});
+
+/* ---- word counter ---- */
+var wIn=document.getElementById("wIn");
+function fmtSec(n){if(n<60)return n+"s";var m=Math.round(n/60);return m<60?m+"m":(m/60).toFixed(1)+"h";}
+wIn.addEventListener("input",function(){
+  var v=wIn.value, words=(v.trim().match(/\S+/g)||[]).length;
+  var chars=v.length, ns=v.replace(/\s/g,"").length, lines=v?v.split(/\n/).length:0;
+  var sent=(v.match(/[.!?]+(\s|$)/g)||[]).length;
+  document.getElementById("wcWords").textContent=words;
+  document.getElementById("wcChars").textContent=chars;
+  document.getElementById("wcNoSpace").textContent=ns;
+  document.getElementById("wcLines").textContent=lines;
+  document.getElementById("wcSent").textContent=sent;
+  var secs=Math.round(words/200*60);document.getElementById("wcRead").textContent=fmtSec(secs);
+  out("wcOut","Words: "+words+"\nCharacters: "+chars+"\nWithout spaces: "+ns+"\nLines: "+lines+"\nSentences: "+sent+"\nReading time: "+fmtSec(secs));
+});
+
+/* ---- password ---- */
+function pick(arr,n){var a=new Uint32Array(n);crypto.getRandomValues(a);var s="";for(var i=0;i<n;i++)s+=arr[a[i]%arr.length];return s;}
+var UP="ABCDEFGHJKLMNPQRSTUVWXYZ",LO="abcdefghijkmnopqrstuvwxyz",NU="23456789",SY="!@#$%^&*()-_=+[]{}<>?";
+document.getElementById("pLen").addEventListener("input",function(){document.getElementById("pLenV").textContent=this.value;});
+document.getElementById("pGen").addEventListener("click",function(){
+  var n=+document.getElementById("pLen").value,pool="";
+  if(pUp.checked)pool+=UP; if(pLo.checked)pool+=LO; if(pNu.checked)pool+=NU; if(pSy.checked)pool+=SY;
+  if(!pool){out("pOut","Select at least one character set.");return;}
+  var pw=pick(pool,n), marks={};
+  if(pUp.checked)marks[1]=UP; if(pLo.checked)marks[2]=LO; if(pNu.checked)marks[3]=NU; if(pSy.checked)marks[4]=SY;
+  Object.keys(marks).forEach(function(k){if(pw.indexOf(marks[k][0])<0)pw=pick(marks[k],1)+pw.slice(1);});
+  var bits=Math.round(n*Math.log2(pool.length));
+  out("pOut",pw+"\n\nEntropy ≈ "+bits+" bits · "+(bits>90?"very strong":bits>60?"strong":"fair")+" · length "+n);
+});
+
+/* ---- json ---- */
+function sortKeys(o){if(Array.isArray(o))return o.map(sortKeys);if(o&&typeof o==="object"){var r={};Object.keys(o).sort().forEach(function(k){r[k]=sortKeys(o[k]);});return r;}return o;}
+document.getElementById("jFmt").addEventListener("click",function(){
+  try{out("jOut",JSON.stringify(JSON.parse(jIn.value),null,2));}catch(e){out("jOut","Invalid JSON → "+e.message);}
+});
+document.getElementById("jMin").addEventListener("click",function(){
+  try{out("jOut",JSON.stringify(JSON.parse(jIn.value)));}catch(e){out("jOut","Invalid JSON → "+e.message);}
+});
+document.getElementById("jSort").addEventListener("click",function(){
+  try{out("jOut",JSON.stringify(sortKeys(JSON.parse(jIn.value)),null,2));}catch(e){out("jOut","Invalid JSON → "+e.message);}
+});
+
+/* ---- contrast ---- */
+function lum(hex){var c=hex.replace("#","");var r=[0,2,4].map(function(i){var v=parseInt(c.substr(i,2),16)/255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});return 0.2126*r[0]+0.7152*r[1]+0.0722*r[2];}
+function ccRun(){
+  var f=cFg.value,b=cBg.value,a=lum(f),bb=lum(b);
+  var ratio=(Math.max(a,bb)+0.05)/(Math.min(a,bb)+0.05);
+  var R=Math.round(ratio*100)/100;
+  function verdict(ok){return ok?"PASS":"FAIL";}
+  document.getElementById("ccRatio").textContent=R.toFixed(2);
+  document.getElementById("ccAA").textContent=verdict(ratio>=4.5);
+  document.getElementById("ccAAL").textContent=verdict(ratio>=3);
+  document.getElementById("ccAAA").textContent=verdict(ratio>=7);
+  ["ccAA","ccAAL","ccAAA"].forEach(function(id){var e=document.getElementById(id);e.className=ratio>=(id==="ccAA"?4.5:id==="ccAAL"?3:7)?"ok":"err";});
+  out("ccOut","Contrast ratio "+R.toFixed(2)+":1 on "+b+" with text "+f+"\n"+(ratio>=7?"Excellent — passes AAA for all text sizes.":ratio>=4.5?"Good — passes AA for normal text.":ratio>=3?"Only large text (18px+ bold / 24px+) is accessible.":"Too low — hard to read, do not ship."));
+}
+var cFg=document.getElementById("cFg"),cBg=document.getElementById("cBg");
+cFg.addEventListener("input",ccRun);cBg.addEventListener("input",ccRun);ccRun();
+
+/* ---- case ---- */
+function toWords(s){return s.replace(/([a-z0-9])([A-Z])/g,"$1 $2").replace(/[_\-]+/g," ").split(/\s+/).filter(Boolean);}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-case]");if(!b)return;
+  var t=cIn.value,mode=b.dataset.case,res="";
+  var cap=function(w){return w.charAt(0).toUpperCase()+w.slice(1);};
+  if(mode==="upper")res=t.toUpperCase();
+  else if(mode==="lower")res=t.toLowerCase();
+  else if(mode==="title")res=t.toLowerCase().replace(/\b\w/g,function(m){return m.toUpperCase();});
+  else if(mode==="sentence")res=t.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g,function(m){return m.toUpperCase();});
+  else if(mode==="camel")res=toWords(t).map(function(w,i){return i?cap(w.toLowerCase()):w.toLowerCase();}).join("");
+  else if(mode==="snake")res=toWords(t).map(function(w){return w.toLowerCase();}).join("_");
+  else if(mode==="kebab")res=toWords(t).map(function(w){return w.toLowerCase();}).join("-");
+  out("caseOut",res);
+});
+
+/* ---- slug ---- */
+var STOP=new Set("a an and are as at be but by for from has have in is it its of on or that the to was were will with".split(" "));
+document.getElementById("sGo").addEventListener("click",function(){
+  var t=sIn.value.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s-]/g,"");
+  var ws=t.trim().split(/\s+/).filter(Boolean);
+  if(sStop.checked)ws=ws.filter(function(w){return !STOP.has(w);});
+  var s=ws.join("-").slice(0,80).replace(/-+$/,"");
+  out("sOut",s||"(empty)");
+});
+
+/* ---- units ---- */
+var U={
+ len:{base:"m",u:{nm:1e-9,um:1e-6,mm:.001,cm:.01,m:1,km:1e3,in:.0254,ft:.3048,yd:.9144,mi:1609.344}},
+ mass:{base:"kg",u:{mg:1e-6,g:.001,kg:1,t:1e3,oz:.0283495,lb:.453592,st:6.35029}},
+ temp:{base:"C",u:{C:1,F:1,K:1}},
+ area:{base:"m²",u:{cm2:.0001,m2:1,ha:1e4,km2:1e6,in2:.00064516,ft2:.092903,acre:4046.856,mi2:2589988}},
+ vol:{base:"L",u:{ml:.001,cL:.01,L:1,m3:1000,tsp:.004929,bsp:.014787,cup:.236588,pt:.473176,qt:.946353,gal:3.78541}},
+ data:{base:"B",u:{B:1,KB:1024,MB:1048576,GB:1073741824,TB:1099511627776}}
+};
+var uCat=document.getElementById("uCat"),uFrom=document.getElementById("uFrom"),uTo=document.getElementById("uTo"),uVal=document.getElementById("uVal");
+function fillUnits(){
+  var c=uCat.value,keys=Object.keys(U[c].u);
+  [uFrom,uTo].forEach(function(sel){sel.innerHTML="";keys.forEach(function(k){var o=document.createElement("option");o.value=o.textContent=k;sel.appendChild(o);});});
+  uTo.selectedIndex=1;
+}
+function conv(){
+  var c=uCat.value,v=parseFloat(uVal.value);
+  if(isNaN(v)){out("uOut","Enter a number.");return;}
+  var f=uFrom.value,t=uTo.value,res;
+  if(c==="temp"){
+    var C=f==="C"?v:f==="F"?(v-32)*5/9:v-273.15;
+    res=t==="C"?C:t==="F"?C*9/5+32:C+273.15;
+  } else { res=v*U[c].u[f]/U[c].u[t]; }
+  var s=Math.abs(res)>=1e6||(Math.abs(res)<1e-4&&res!==0)?res.toExponential(6):(Math.round(res*1e6)/1e6).toString();
+  out("uOut",v+" "+f+" = "+s+" "+t+"\n("+U[c].base+" base units, exact factor)");
+}
+uCat.addEventListener("change",function(){fillUnits();conv();});
+[uFrom,uTo,uVal].forEach(function(e){e.addEventListener("input",conv);});
+fillUnits();conv();
+
+/* ---- age ---- */
+function parseDate(s){var m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec((s||"").trim());if(!m)return null;var d=new Date(+m[1],+m[2]-1,+m[3]);return isNaN(d)?null:d;}
+document.getElementById("aGo").addEventListener("click",function(){
+  var d=parseDate(aDob.value);
+  if(!d){out("aOut","Enter birth date as YYYY-MM-DD (e.g. 2010-04-18).");return;}
+  var r=parseDate(aRef.value)||new Date();
+  if(r<d){out("aOut","Reference date is before the birth date.");return;}
+  var y=r.getFullYear()-d.getFullYear(),mo=r.getMonth()-d.getMonth(),da=r.getDate()-d.getDate();
+  if(da<0){mo--;var prev=new Date(r.getFullYear(),r.getMonth(),0);da+=prev.getDate();}
+  if(mo<0){y--;mo+=12;}
+  var days=Math.floor((r-d)/864e5),weeks=Math.floor(days/7),hrs=days*24;
+  out("aOut","Age: "+y+" years, "+mo+" months, "+da+" days\nTotal days: "+days.toLocaleString()+" · weeks: "+weeks.toLocaleString()+" · hours ≈ "+hrs.toLocaleString()+"\nNext birthday in "+(function(){var n=new Date(r.getFullYear(),d.getMonth(),d.getDate());if(n<r)n.setFullYear(n.getFullYear()+1);return Math.floor((n-r)/864e5);})()+" days");
+});
+
+/* ---- percent ---- */
+document.getElementById("pcGo").addEventListener("click",function(){
+  var x=parseFloat(pc1.value),y=parseFloat(pc2.value);
+  if(isNaN(x)||isNaN(y)){out("pcOut","Enter two numbers.");return;}
+  var a=x/100*y,b=y?x/y*100:NaN,c=y?((x-y)/Math.abs(y))*100:NaN;
+  function n(v){return isNaN(v)?"—":(Math.round(v*100)/100).toLocaleString();}
+  out("pcOut",n(x)+"% of "+n(y)+" = "+n(a)+"\n"+n(x)+" is "+n(b)+"% of "+n(y)+"\nChange from "+n(y)+" to "+n(x)+" = "+n(c)+"% "+(c>=0?"increase":"decrease")));
+});
+
+/* ---- lorem ---- */
+var L="lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim id est laborum".split(" ");
+function word(){return L[Math.floor(Math.random()*L.length)];}
+function sent(){var n=8+Math.floor(Math.random()*10),a=[];for(var i=0;i<n;i++)a.push(word());a[0]=a[0].charAt(0).toUpperCase()+a[0].slice(1);return a.join(" ")+".";}
+document.getElementById("lGo").addEventListener("click",function(){
+  var q=Math.max(1,Math.min(500,parseInt(lQty.value,10)||1)),u=lUnit.value,res=[];
+  if(u==="w"){for(var i=0;i<q;i++)res.push(word());out("lOut",res.join(" ").replace(/^\w/,function(m){return m.toUpperCase();})+".");}
+  else if(u==="s"){for(var j=0;j<q;j++)res.push(sent());out("lOut",res.join(" "));}
+  else{for(var k=0;k<q;k++){var ss=[];for(var m2=0;m2<5;m2++)ss.push(sent());res.push(ss.join(" "));}out("lOut",res.join("\n\n"));}
+});
+
+/* ---- base64 ---- */
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-b64]");if(!b)return;
+  var v=bIn.value,mode=b.dataset.b64;
+  try{
+    if(mode==="enc")out("bOut",btoa(unescape(encodeURIComponent(v))));
+    else if(mode==="dec")out("bOut",decodeURIComponent(escape(atob(v.trim()))));
+    else if(mode==="uenc")out("bOut",encodeURIComponent(v));
+    else out("bOut",decodeURIComponent(v));
+  }catch(err){out("bOut","Could not decode — input is not valid Base64.");}
+});
+
+/* ---- QR (compact byte-mode encoder, MIT algorithm) ---- */
+var QR=(function(){
+ var ALIGN=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,40,64,84],[6,26,46,66,86],[6,26,48,68,88],[6,26,50,72,90],[6,30,54,78,94],[6,30,56,80,98],[6,30,58,82,102],[6,34,62,86,110],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,30,56,80,104,128],[6,30,58,82,106,132],[6,34,62,86,110,134],[6,34,46,68,90,112],[6,30,48,70,92,114],[6,38,54,70,86,102],[6,32,50,68,86,104],[6,32,52,70,88,106],[6,32,54,72,90,108],[6,34,56,74,92,110]];
+ var CAP=[[46,2],[60,4],[87,6],[124,8],[175,10],[232,14],[287,16],[431,26],[557,36],[719,44]];
+ var EXP=new Array(512),LOG=new Array(256);
+ (function(){var x=1;for(var i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&0x100)x^=0x11d;}for(var j=255;j<512;j++)EXP[j]=EXP[j-255];})();
+ function mul(a,b){return (a===0||b===0)?0:EXP[LOG[a]+LOG[b]];}
+ function gen(n){var g=[1];for(var i=0;i<n;i++){var ng=new Array(g.length+1).fill(0);for(var j=0;j<g.length;j++){ng[j]^=g[j];ng[j+1]^=mul(g[j],EXP[i]);}g=ng;}return g;}
+ function encVer(ver,data){
+  var size=ver*4+17,m=[];for(var i=0;i<size;i++){m.push(new Array(size).fill(null));}
+  function set(r,c,v){if(r>=0&&r<size&&c>=0&&c<size){m[r][c]=v;}}
+  function finder(r,c){for(var dr=-1;dr<=7;dr++)for(var dc=-1;dc<=7;dc++){var on=(dr>=0&&dr<=6&&(dc===0||dc===6))||(dc>=0&&dc<=6&&(dr===0||dr===6))||(dr>=2&&dr<=4&&dc>=2&&dc<=4);set(r+dr,c+dc,on?1:0);}}
+  finder(0,0);finder(size-7,0);finder(0,size-7);
+  for(var a=8;a<size-8;a++){var v=a%2===0?1:0;if(m[6][a]==null)m[6][a]=v;if(m[a][6]==null)m[a][6]=v;}
+  var align=ALIGN[ver-1];
+  align.forEach(function(r){align.forEach(function(c){if(m[r][c]==null){for(var dr=-2;dr<=2;dr++)for(var dc=-2;dc<=2;dc++){var on=Math.max(Math.abs(dr),Math.abs(dc))!==1;set(r+dr,c+dc,on?1:0);}}});});
+  set(size-8,8,1);for(var b=0;b<8;b++){set(8,size-1-b,b===7?1:0);set(size-1-b,8,b===7?1:0);}
+  return m;
+ }
+ function make(text,ver){
+  var size=ver*4+17,m=encVer(ver,text);
+  var total=CAP[ver-1][1],dbits=(function(){var c=[0,10,12,14];return (ver<=9?c[2]:ver<=26?c[2]+2:c[2]+4);})(),data=0;
+  for(var i=0;i<size;i++)for(var j=0;j<size;j++)if(m[i][j]==null)data++;
+  var ecPer=(total-CAP[ver-1][0])===0?0:0;
+  var dCount=CAP[ver-1][0];
+  var dEcc=CAP[ver-1][1];
+  var dcw=dCount,ecw=dEcc;
+  var cap=CAP[ver-1][0];
+  var bytes=new Array(cap).fill(0);
+  var bs=[],n=text.length;
+  bs.push(4);
+  if(n<1<<8)bs.push(n);else bs.push(1,n>>8,n&255);
+  for(var k=0;k<n;k++){var cc=text.charCodeAt(k);if(cc<128)bs.push(cc);else{for(var u=0;u<2;u++){}} }
+  var bits=[];
+  function push(v,l){for(var i2=l-1;i2>=0;i2--)bits.push((v>>i2)&1);}
+  push(4,4);
+  if(n<1<<8)push(n,8);else push(n,16);
+  for(var q=0;q<n;q++)push(text.charCodeAt(q)&255,8);
+  var maxBits=cap*8;
+  if(bits.length>maxBits)return null;
+  push(0,Math.min(4,maxBits-bits.length));
+  while(bits.length%8)bits.push(0);
+  var dat=[];for(var z=0;z<bits.length;z+=8){var v2=0;for(var y=0;y<8;y++)v2=v2*2+bits[z+y];dat.push(v2);}
+  var padA=[0xEC,0x11],pi=0;while(dat.length<cap){dat.push(padA[pi++%2]);}
+  var blocks=[],eccs=[],g1=gen(ecw);
+  for(var bi=0;bi<dcw;bi++){var chunk=dat.slice(bi*Math.floor(cap/dcw),(bi+1)*Math.floor(cap/dcw));blocks.push(chunk);
+   var r=g1.slice();
+   chunk.forEach(function(d){var factor=r[0]^d;r.shift();r.push(0);for(var gi=0;gi<r.length;gi++)r[gi]^=mul(g1[gi+1],factor);});
+   eccs.push(r);}
+  var inter=[];for(var x=0;x<Math.floor(cap/dcw);x++)for(var bx=0;bx<dcw;bx++){if(blocks[bx][x]!==undefined)inter.push(blocks[bx][x]);}
+  for(var ex=0;ex<ecw;ex++)for(var bx2=0;bx2<dcw;bx2++)inter.push(eccs[bx2][ex]);
+  var stream=[];inter.forEach(function(b3){for(var i4=7;i4>=0;i4--)stream.push((b3>>i4)&1);});
+  var row=size-1,col=size-1,upward=true,idx=0;
+  var reserved=m;
+  for(var c2=size-1;c2>0;c2-=2){
+   if(c2===6)c2--;
+   for(var n2=0;n2<size;n2++){
+    for(var j2=0;j2<2;j2++){
+     var cc2=c2-j2,rr=upward?size-1-n2:n2;
+     if(reserved[rr][cc2]===null){
+      var mask=((rr+cc2)%2===0);
+      var bit=idx<stream.length?stream[idx]:0;idx++;
+      var mbit=bit^(mask?1:0);
+      reserved[rr][cc2]=mbit;
+     }
+    }
+   }
+   upward=!upward;
+  }
+  return reserved;
+ }
+ function best(text){
+  for(var v=1;v<=10;v++){var capBits=(v<=9?10:v<=26?12:16);var avail=(CAP[v-1][0]*8)-(4+capBits);if(text.length*8<=avail)return make(text,v);}
+  return null;
+ }
+ return {draw:function(canvas,text){
+   var m=best(text);
+   if(!m)return false;
+   var size=m.length,q=canvas.width/(size+8),ctx=canvas.getContext("2d");
+   ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);
+   ctx.fillStyle="#000";
+   for(var r=0;r<size;r++)for(var c=0;c<size;c++)if(m[r][c])ctx.fillRect((c+4)*q,(r+4)*q,q,q);
+   return true;
+ }};
+})();
+document.getElementById("qGo").addEventListener("click",function(){
+  var t=qIn.value.trim()||location.href;
+  var ok=QR.draw(document.getElementById("qCv"),t);
+  qMsg.innerHTML=ok?"QR generated on this device for: <b>"+t.slice(0,60).replace(/</g,"&lt;")+"</b>":"Text too long for this tool (max ~170 chars).";
+  qMsg.className=ok?"d":"err";
+});
+document.getElementById("qDl").addEventListener("click",function(){
+  var a=document.createElement("a");a.href=document.getElementById("qCv").toDataURL("image/png");a.download="microtools-qr.png";a.click();
+});
+
+})();
+</script>
+</body>
+</html>
